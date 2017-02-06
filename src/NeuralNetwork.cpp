@@ -57,7 +57,7 @@ vector<double> NeuralNetwork::compute(const vector<double> &inputs, bool derivat
     }
     return result;
 }
-vector<double> NeuralNetwork::computeOutputLayers(const unsigned int layer_index, const vector<double> &inputs, bool derivative)
+vector<double> NeuralNetwork::computeOutputLayer(const unsigned int layer_index, const vector<double> &inputs, bool derivative)
 {
      if(layer_index >= this->numLayers && layer_index < 0)
         throw std::invalid_argument("NeuralNetwork::computeOutputLayers invalid layer index");
@@ -65,7 +65,7 @@ vector<double> NeuralNetwork::computeOutputLayers(const unsigned int layer_index
     try
     {
         vector<double> result(inputs);
-        for(unsigned int layer = 0; layer < layer_index; ++layer)
+        for(unsigned int layer = 0; layer <= layer_index; ++layer)
         {
             result = this->layers[layer]->compute(result, derivative);
         }

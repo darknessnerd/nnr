@@ -21,7 +21,16 @@ public:
      *
      */
     virtual void init() = 0;
-    vector<double> computeOutputLayers(const unsigned int layer_index, const vector<double> &inputs, bool derivative  = false);
+
+    /** \brief Compute the layer output
+     *
+     * \param layer_index const unsignedint - index of the layer to compute
+     * \param inputs const vector<double>&  - network input
+     * \param false bool derivative=        - use transfer fuction derivative if is set to true
+     * \return vector<double>
+     *
+     */
+    vector<double> computeOutputLayer(const unsigned int layer_index, const vector<double> &inputs, bool derivative  = false);
     vector<double> compute(const vector<double> &inputs, bool derivative = false);
        /** \brief
      * \return neuron numbers layer's
