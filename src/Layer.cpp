@@ -31,6 +31,41 @@ unsigned int Layer::getNumNeurons() const
 }
 
 
+Matrix<double> Layer::getWeightMatrix(bool transpose )
+{
+    //create the matrix, if transpose is true invert the rows and the colums
+    double rows = this->numNeurons;
+    double columns = this->numInputs;
+    if(transpose)
+    {
+        rows = this->numInputs;
+        columns = this->numNeurons;
+    }
+    Matrix<double> weight_matrix(rows, columns);
+    //init the matrix with the waight values
+    for(unsigned int w = 0; w < this->numInputs; ++w)
+    {
+        for(unsigned int n = 0 ; n < this->numNeurons; ++n)
+        {
+            try
+            {
+                double weight = this->neurons[n]->getWeight(w);
+                if(!transpose)
+                    weight_matrix(n,w) = weight;
+                else
+                    weight_matrix(w,n) = weight;
+            }
+            catch (const std::invalid_argument& e)
+            {
+                std::rethrow_exception(std::current_exception());
+            }
+
+
+        }
+    }
+    return weight_matrix;
+}
+
 unsigned int Layer::getNumInputs() const
 {
     return this->numInputs;

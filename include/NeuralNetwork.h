@@ -22,6 +22,17 @@ public:
      */
     virtual void init() = 0;
 
+
+    /** \brief
+     * Return the matrix weight for the layer with the index "layer_index"
+     *
+     * \param layer_index const unsignedint
+     * \param false bool transpose - transpose the matrix
+     * \return Matrix<double> - rows = weight, columns = neuron
+     *
+     */
+    Matrix<double> getWeightMatrixOfLayer(const unsigned int layer_index, bool transpose = false) const;
+
     /** \brief Compute the layer output
      *
      * \param layer_index const unsignedint - index of the layer to compute

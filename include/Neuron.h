@@ -61,6 +61,14 @@ public:
 
     double compute(const vector<double> &inputs, bool derivate = false);
 
+
+    /** \brief
+     *   return the weight at index "weight_index" in the neuron.
+     * \param weight_index const - index for the weight
+     * \return double  - weight value
+     *
+     */
+    double getWeight(const unsigned int weight_index) const;
      /** Stream extraction
     *   \param output
     *   \param neuron reference to print

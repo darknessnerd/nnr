@@ -3,6 +3,9 @@
 #include "Neuron.h"
 #include<vector>
 using std::vector;
+#include "Matrix.h"
+using namespace math;
+
 namespace nn
 {
 class Layer
@@ -18,6 +21,20 @@ public:
 
     /** Default destructor */
     ~Layer();
+
+
+    /** \brief
+     *
+     * return a matrix with
+     *   - row = weight
+     *   - column = neuron
+     *
+     * \param false bool transpose - transpose matrix
+     * \return Matrix<double> - row = weight, column = neuron
+     *
+     */
+    Matrix<double> getWeightMatrix(bool transpose = false);
+
     void addNeuron(const TransferFunctionType &transferFunctionType);
 
     /**

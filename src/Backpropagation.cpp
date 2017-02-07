@@ -45,7 +45,7 @@ void Backpropagation::train()
         }
         //THIRD STEP BACKPROPAGATION
         //STEP S^m where m last layer
-
+        Matrix<double> *sensitivies = new Matrix<double>[numLayers];
         //INIT ALL ELEMENT
         vector<double> fDerivativeM = nn->compute(inputVector, true);
         Matrix<double> errorMatrix(nn->getNumberOutputs(), 1);
@@ -62,19 +62,16 @@ void Backpropagation::train()
                     fDerivativeMatrix(i, j) = 0.0;
             }
         }
-        Matrix<double> sMResult = fDerivativeMatrix*errorMatrix*-2;
+        sensitivies[numLayers-1] = fDerivativeMatrix*errorMatrix*-2;
 
 
         //S-layer_number
-
-        for(int  l = numLayers-2; l >= 0 ; --l)
+        for(int  layer_index = numLayers-2; layer_index >= 0 ; --layer_index)
         {
-            std::cout << " layer number : "  << l << "\n";
+            std::cout << " layer number : "  << layer_index << "\n";
+            //compute matrix for F^layer_index(n^layer_index)
             Matrix<double> fDerM();
-
-
-            fDerivativeM = nn->computeOutputLayer(l,inputVector, true);
-
+            fDerivativeM = nn->computeOutputLayer(layer_index,inputVector, true);
             fDerivativeMatrix =  Matrix<double>(fDerivativeM.size(), fDerivativeM.size());
             for(size_t i = 0; i < fDerivativeM.size(); ++i)
             {
@@ -87,10 +84,18 @@ void Backpropagation::train()
                 }
             }
 
+            //Weight transpose matrix layer_index+1
+            Matrix<double> wT = nn->getWeightMatrixOfLayer(layer_index+1, true);
+            sensitivies[layer_index] = fDerivativeMatrix*wT*sensitivies[layer_index+1];
+
+
+
 
         }
+        //LAST STEP - update the weights
 
 
+        delete sensitivies;
         delete error;
     }
 }

@@ -3,14 +3,14 @@ using namespace nn;
 #include<stdexcept>
 #include<assert.h>
 
-
+#include <algorithm>
 
 
 Neuron::Neuron()
 {
-   this->w = nullptr;
-   this->bias = 0;
-   this->transferFunction = nullptr;
+    this->w = nullptr;
+    this->bias = 0;
+    this->transferFunction = nullptr;
 }
 Neuron::Neuron(const unsigned int &index, const int &numberInputs, const TransferFunctionType &transferFunctionType):index(index),numberInputs(numberInputs)
 {
@@ -43,6 +43,12 @@ Neuron::~Neuron()
     delete[] w;
 }
 
+double Neuron::getWeight(const unsigned int weight_index) const
+{
+    if(weight_index >= numberInputs)
+        throw std::invalid_argument("Neuron::getWeight invalid weight index");
+    return w[weight_index];
+}
 double Neuron::productory(const vector<double> &inputs)
 {
     double productory = 0;
@@ -93,7 +99,7 @@ void Neuron::addWeight(const unsigned int &input_index, const double &weight)
 {
 
     if(input_index >= this->numberInputs)
-       throw std::invalid_argument("Neuron::addWeight invalid input index");
+        throw std::invalid_argument("Neuron::addWeight invalid input index");
 
     this->w[input_index]+=weight;
 
@@ -102,7 +108,7 @@ void Neuron::addWeight(const unsigned int &input_index, const double &weight)
 
 int Neuron::getNumberInputs() const
 {
-   return this->numberInputs;
+    return this->numberInputs;
 }
 /**
 * copy assignment operator
