@@ -162,6 +162,10 @@ template<class T> Matrix<T> Matrix<T>::operator*(const Matrix<T> & other)
    {
       throw std::logic_error("template<class T> Matrix<T>&& Matrix<T>::operator*(const Matrix<T> other) :~ invalid multiplication matrix  ");
    }
+
+   //special case matrix scalar
+
+
    Matrix<T> result(this->rows, other.columns);
 
    for(std::size_t cOther = 0; cOther < other.columns; ++cOther)

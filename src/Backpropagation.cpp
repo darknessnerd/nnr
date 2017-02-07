@@ -100,23 +100,18 @@ void Backpropagation::train()
             Matrix<double> w = nn->getWeightMatrixOfLayer(layer_index);
             std::cout << "Update for " << layer_index << "\n";
             //compute the input for the current layer
-            vector<double> a = nn->computeOutputLayer(layer_index-1,inputVector, false);
-             Matrix<double> aT(a.size(), 1);
 
-
-
+            vector<double> a;
+            if(layer_index != 0)
+                a = nn->computeOutputLayer(layer_index-1,inputVector, false);
+            else
+                a = inputVector;
+            Matrix<double> aT(1, a.size());
             for(unsigned int i = 0; i < a.size(); ++i)
-                 aT(i,0) = a[i];
-            std::cout << "w: " << "\n";
-            std::cout << w;
+                 aT(0,i) = a[i];
 
-            std::cout << "sensitivies[layer_index]: " << "\n";
-            std::cout << sensitivies[layer_index];
 
-            std::cout << "aT: " << "\n";
-            std::cout << aT;
-
-            Matrix<double> wToUpdate = w*(sensitivies[layer_index] * aT * learning_rate);
+            Matrix<double> wToUpdate = w-(sensitivies[layer_index] * aT * learning_rate);
 
             std::cout << wToUpdate;
 
