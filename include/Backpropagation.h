@@ -16,6 +16,7 @@ class Backpropagation : public SupervisedLearning
     protected:
 
     private:
+       double learning_rate;
 };
 
 }

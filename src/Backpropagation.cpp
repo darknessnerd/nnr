@@ -4,7 +4,7 @@ using namespace nn::train;
 #include <math.h>
 #include "Matrix.h"
 using namespace math;
-Backpropagation::Backpropagation(NeuralNetwork *nn):SupervisedLearning(nn)
+Backpropagation::Backpropagation(NeuralNetwork *nn):SupervisedLearning(nn), learning_rate(0.1)
 {
 
 }
@@ -83,7 +83,6 @@ void Backpropagation::train()
                         fDerivativeMatrix(i, j) = 0.0;
                 }
             }
-
             //Weight transpose matrix layer_index+1
             Matrix<double> wT = nn->getWeightMatrixOfLayer(layer_index+1, true);
             sensitivies[layer_index] = fDerivativeMatrix*wT*sensitivies[layer_index+1];
@@ -91,11 +90,41 @@ void Backpropagation::train()
 
 
 
+
+
         }
         //LAST STEP - update the weights
+        for(int  layer_index = numLayers-1; layer_index >= 0 ; --layer_index)
+        {
+
+            Matrix<double> w = nn->getWeightMatrixOfLayer(layer_index);
+            std::cout << "Update for " << layer_index << "\n";
+            //compute the input for the current layer
+            vector<double> a = nn->computeOutputLayer(layer_index-1,inputVector, false);
+             Matrix<double> aT(a.size(), 1);
 
 
-        delete sensitivies;
+
+            for(unsigned int i = 0; i < a.size(); ++i)
+                 aT(i,0) = a[i];
+            std::cout << "w: " << "\n";
+            std::cout << w;
+
+            std::cout << "sensitivies[layer_index]: " << "\n";
+            std::cout << sensitivies[layer_index];
+
+            std::cout << "aT: " << "\n";
+            std::cout << aT;
+
+            Matrix<double> wToUpdate = w*(sensitivies[layer_index] * aT * learning_rate);
+
+            std::cout << wToUpdate;
+
+
+        }
+
+        std::cout << " @ : "  << "\n";
+        delete []sensitivies;
         delete error;
     }
 }

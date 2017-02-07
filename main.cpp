@@ -8,44 +8,15 @@ using namespace std;
 #include <array>
 #include <utility>
 #include "Algorithm.h"
-
+#include "FunctionApproximationNetwork.h"
+#include "Backpropagation.h"
 
 #include "Perceptron.h"
-// print elements of an STL container
-template <typename T> void printcoll (T const& coll);
-
-void perceptronTest();
-void hubeRuleTest();
 
 
-int main()
-{
 
-    math::Matrix<double> m(
-    {
-        {1, 2, 4},
-        {3, 8 , 14},
-        {2, 6 ,13}
-    }
-    );
 
-    std::pair<math::Matrix<double>, math::Matrix<double>> r = math::algorithm::matrix::crud(m);
-    double det = math::algorithm::matrix::det(m);
-    std::cout << r.first;
-    std::cout << std::endl;
-    std::cout << r.second;
-    std::cout << std::endl;
-    std::cout << r.first * r.second;
-
-    std::cout << "determinant: " << det << std::endl;
-
-    //hubeRuleTest();
-    //perceptronTest();
-
-    return 0;
-}
-template <typename T>
-void printcoll (T const& coll)
+template <typename T> void printcoll (T const& coll)
 {
     typename T::const_iterator pos;  // iterator to iterate over coll
     typename T::const_iterator end(coll.end());  // end position
@@ -92,6 +63,7 @@ void hubeRuleTest()
 
 void perceptronTest()
 {
+
     nn::NeuralNetwork *perceptron = new Perceptron(2,1);
     perceptron->init();
 
@@ -117,6 +89,52 @@ void perceptronTest()
     printcoll(r);
 
     delete perceptron;
+}
+
+void backPropagationTest()
+{
+
+    nn::NeuralNetwork *fan = new FunctionApproximationNetwork();
+    fan->init();
+
+
+
+    cout << endl;
+    nn::train::Backpropagation bck(fan);
+    //add training elemnts
+    bck.addTrainPair({1}, {1.7});
+
+    bck.train();
+
+    cout << fan << endl;
+
+
+  /*  vector<double> r = fan->compute({1});
+    printcoll(r);
+    r = fan->compute({0.5});
+    printcoll(r);
+    r = fan->compute({-1});
+    printcoll(r);
+*/
+    delete fan;
+
+}
+
+int main()
+{
+
+    backPropagationTest();
+    /*Matrix<double> m(1,1);
+    m(0,0) = 1;
+    std::cout << m;
+
+    Matrix<double> m1(1,1);
+    m1(0,0) = 2;
+    std::cout << m1;
+
+
+    std::cout << m*m1;
+    */return 0;
 }
 
 

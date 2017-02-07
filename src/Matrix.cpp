@@ -159,7 +159,9 @@ template<class T> T Matrix<T>::operator()(std::size_t row, std::size_t column) c
 template<class T> Matrix<T> Matrix<T>::operator*(const Matrix<T> & other)
 {
    if(this->columns != other.rows)
-      throw std::logic_error("template<class T> Matrix<T>&& Matrix<T>::operator()(const Matrix<T> other) :~ invalid multiplication matrix  ");
+   {
+      throw std::logic_error("template<class T> Matrix<T>&& Matrix<T>::operator*(const Matrix<T> other) :~ invalid multiplication matrix  ");
+   }
    Matrix<T> result(this->rows, other.columns);
 
    for(std::size_t cOther = 0; cOther < other.columns; ++cOther)
@@ -179,6 +181,24 @@ template<class T> Matrix<T> Matrix<T>::operator*(const Matrix<T> & other)
 
    return result;
 
+}
+template<class T> Matrix<T> Matrix<T>::operator-(const Matrix<T> & other)
+{
+    if(this->columns != other.columns && this->rows != other.columns)
+        throw std::logic_error("template<class T> Matrix<T> Matrix<T>::operator-(const Matrix<T> & other) :~ invalid minus operation matrix  ");
+
+    Matrix<T> result(this->rows, this->columns);
+
+    for(std::size_t row = 0; row < this->rows; ++row)
+   {
+      for(std::size_t column = 0; column < this->columns; ++column)
+      {
+          result(row, column) = this->m[row][column]-other.m[row][column];
+
+      }
+   }
+
+    return result;
 }
 template<class T> Matrix<T> Matrix<T>::operator*(double constant)
 {

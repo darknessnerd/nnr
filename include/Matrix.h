@@ -60,6 +60,7 @@ public:
     Matrix<T> operator*(const Matrix<T> & other);
     Matrix<T> operator*(double constant);
 
+    Matrix<T> operator-(const Matrix<T> & other);
     std::size_t getRows() const;
     std::size_t getColumns() const;
 protected:
