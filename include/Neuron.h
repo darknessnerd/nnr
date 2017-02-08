@@ -58,6 +58,13 @@ public:
 
 
 
+    /** \brief
+     *
+     * return the bias value for the network
+     * \return double
+     *
+     */
+    double getBias() const;
 
     double compute(const vector<double> &inputs, bool derivate = false);
 

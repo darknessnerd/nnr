@@ -32,7 +32,15 @@ public:
      *
      */
     Matrix<double> getWeightMatrixOfLayer(const unsigned int layer_index, bool transpose = false) const;
-
+     /** \brief
+     * Return the matrix bias for the layer with the index "layer_index"
+     *
+     * \param layer_index const unsignedint
+     * \param false bool transpose - transpose the matrix
+     * \return Matrix<double> - [rows = 1, columns = neuron] or if transpose is set to true [rows = neuron, columns = 1]
+     *
+     */
+    Matrix<double> getBiasMatrixOfLayer(const unsigned int layer_index, bool transpose = false) const;
     /** \brief Compute the layer output
      *
      * \param layer_index const unsignedint - index of the layer to compute

@@ -39,7 +39,23 @@ void NeuralNetwork::addWeight(const unsigned int layer_index,const unsigned int 
     }
 
 }
+Matrix<double> NeuralNetwork::getBiasMatrixOfLayer(const unsigned int layer_index, bool transpose ) const
+{
+    if(layer_index >= this->numLayers)
+        throw std::invalid_argument("NeuralNetwork::getBiasMatrixOfLayer invalid layer index");
 
+
+    try
+    {
+        return this->layers[layer_index]->getBiasMatrix(transpose);
+    }
+    catch (const std::invalid_argument& e)
+    {
+        std::rethrow_exception(std::current_exception());
+    }
+
+    return Matrix<double>(0,0);
+}
 Matrix<double> NeuralNetwork::getWeightMatrixOfLayer(const unsigned int layer_index, bool transpose ) const
 {
     if(layer_index >= this->numLayers)

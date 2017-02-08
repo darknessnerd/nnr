@@ -115,6 +115,10 @@ void Backpropagation::train()
 
             std::cout << wToUpdate;
 
+            Matrix<double> biasToUpdate = nn->getBiasMatrixOfLayer(layer_index) - ( sensitivies[layer_index] * learning_rate );
+
+            std::cout << biasToUpdate;
+
 
         }
 

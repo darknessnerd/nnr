@@ -34,7 +34,13 @@ public:
      *
      */
     Matrix<double> getWeightMatrix(bool transpose = false);
-
+    /** \brief
+     * Get the bias matrix
+     * \param false bool transpose
+     * \return Matrix<double>
+     *
+     */
+    Matrix<double> getBiasMatrix(bool transpose = false);
     void addNeuron(const TransferFunctionType &transferFunctionType);
 
     /**

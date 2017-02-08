@@ -30,7 +30,34 @@ unsigned int Layer::getNumNeurons() const
     return this->numNeurons;
 }
 
+Matrix<double> Layer::getBiasMatrix(bool transpose)
+{
+//create the matrix, if transpose is true invert the rows and the colums
+    double rows = this->numNeurons;
+    double columns = 1;
+    if(transpose)
+    {
+        rows = 1;
+        columns = this->numNeurons;
+    }
+    Matrix<double> bias_matrix(rows, columns);
+    //init the matrix with the waight values
 
+        for(unsigned int n = 0 ; n < this->numNeurons; ++n)
+        {
+
+                double weight = this->neurons[n]->getBias();
+                if(!transpose)
+                    bias_matrix(n,0) = weight;
+                else
+                    bias_matrix(0,n) = weight;
+
+
+
+        }
+
+    return bias_matrix;
+}
 Matrix<double> Layer::getWeightMatrix(bool transpose )
 {
     //create the matrix, if transpose is true invert the rows and the colums
