@@ -54,8 +54,8 @@ public:
 
     int getNumberInputs() const;
 
-    void addWeight(const unsigned int &input_index, const double &weight);
-
+    void addWeight(const unsigned int input_index, const double weight);
+    void setWeight(const unsigned int input_index, const double weight);
 
 
     /** \brief
@@ -65,7 +65,13 @@ public:
      *
      */
     double getBias() const;
-
+    /** \brief
+     * set the bias neuron value
+     * \param bias_value const double
+     * \return void
+     *
+     */
+    void setBias(const double bias_value);
     double compute(const vector<double> &inputs, bool derivate = false);
 
 

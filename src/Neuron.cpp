@@ -57,12 +57,16 @@ double Neuron::productory(const vector<double> &inputs)
     {
         productory += (*it) * this->w[i++];
     }
-    return productory;
+    return productory + this->bias;
 }
 
 double Neuron::getBias() const
 {
     return bias;
+}
+void Neuron::setBias(const double bias_value)
+{
+    this->bias = bias_value;
 }
 double Neuron::compute(const vector<double> &inputs, bool derivate )
 {
@@ -100,13 +104,22 @@ void Neuron::copyFrom(const Neuron& other)
         throw TransferFunctionTypeException();
 
 }
-void Neuron::addWeight(const unsigned int &input_index, const double &weight)
+void Neuron::addWeight(const unsigned int input_index, const double weight)
 {
 
     if(input_index >= this->numberInputs)
         throw std::invalid_argument("Neuron::addWeight invalid input index");
 
     this->w[input_index]+=weight;
+
+}
+void Neuron::setWeight(const unsigned int input_index, const double weight)
+{
+
+    if(input_index >= this->numberInputs)
+        throw std::invalid_argument("Neuron::setWeight invalid input index");
+
+    this->w[input_index] =weight;
 
 }
 

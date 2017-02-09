@@ -11,7 +11,7 @@ namespace nn
 
         public:
             /** Default constructor */
-            Training( NeuralNetwork* const nn);
+            Training( NeuralNetwork* const network);
             /** Default destructor */
             virtual ~Training() = 0;
 

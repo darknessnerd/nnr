@@ -1,6 +1,6 @@
 #include "Training.h"
 using namespace nn::train;
-Training::Training(NeuralNetwork* const nn):nn(nn)
+Training::Training(NeuralNetwork* const network):nn(network)
 {
     //ctor
 }

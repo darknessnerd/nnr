@@ -8,7 +8,7 @@ namespace train{
 class Backpropagation : public SupervisedLearning
 {
     public:
-        Backpropagation(NeuralNetwork *nn);
+        Backpropagation(NeuralNetwork *network);
         virtual ~Backpropagation();
 
         void train();

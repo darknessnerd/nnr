@@ -40,7 +40,7 @@ class HardLimit: public TransferFunction
     }
     double derivative(double n)
     {
-        return 0;
+        return 0*n;
     }
 };
 class LogSigmoid: public TransferFunction
@@ -64,7 +64,7 @@ class HardLimitSymmetrical: public TransferFunction
     }
     double derivative(double n)
     {
-        return 0;
+        return 0*n;
     }
 };
 
@@ -76,7 +76,7 @@ class PureLinear: public TransferFunction
     }
     double derivative(double n)
     {
-        return 1;
+        return n/n;
     }
 };
 }

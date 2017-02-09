@@ -68,6 +68,16 @@ public:
     */
     void addWeight(const unsigned int &neuron_index, const unsigned int &input_index,const double &weight);
 
+    /** \brief
+     *   update the neuron weight of the layer
+     * \param weights_matrix const Matrix<double>& - rows = neurons, columns = inputs
+     * \return void
+     *
+     */
+    void setWeights(const Matrix<double> &weights_matrix);
+
+    void setBiases(const Matrix<double> &bias);
+
     friend ostream &operator<<( ostream &output, const Layer *l )
     {
         output << "-------------- Layer name = [" << l->name << "] --------------\n";

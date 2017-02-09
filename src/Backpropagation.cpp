@@ -4,7 +4,7 @@ using namespace nn::train;
 #include <math.h>
 #include "Matrix.h"
 using namespace math;
-Backpropagation::Backpropagation(NeuralNetwork *nn):SupervisedLearning(nn), learning_rate(0.1)
+Backpropagation::Backpropagation(NeuralNetwork *network):SupervisedLearning(network), learning_rate(0.1)
 {
 
 }
@@ -16,63 +16,61 @@ Backpropagation::~Backpropagation()
 void Backpropagation::train()
 {
     //random weight
-    nn->random_weight();
+    //nn->random_weight();
 
-    unsigned int numInputs = nn->getNumberInputs();
-    unsigned int numLayers = nn->getNumLayers();
-    std::cout << numLayers << " ################ \n";
-    for(std::list<pair<double*,double*>>::iterator n = testset->begin(); n != testset->end(); ++n)
+    Matrix<double> layer_0_w = {{-0.27}, {-0.41}};
+    Matrix<double> layer_0_b = {{-0.48}, {-0.13}};
+
+    Matrix<double> layer_1_w = {{0.09, 0.17}};
+    Matrix<double> layer_1_b = {{0.48}};
+    this->nn->setWeights(0, layer_0_w);
+    this->nn->setBiases(0, layer_0_b);
+
+    this->nn->setWeights(1, layer_1_w);
+    this->nn->setBiases(1, layer_1_b);
+
+    std::cout << nn;
+
+    unsigned int epoch = 0;
+    while(epoch < 1)
     {
-        //input - target
-        double* input  = (*n).first;
-        double* target = (*n).second;
-        //FIRST STEP COMPUTE THE OUTPUT FORM THE NN
-        vector<double> inputVector = vector<double>(input,(input+numInputs));
-        //a is the vector output of the nn
-        vector<double> a = nn->compute(inputVector);
-
-        //SECOND STEP COMPUTE THE ERROR
-        double *error = new double[nn->getNumberOutputs()];
-        double total_error = 0;
-        unsigned int output_index = 0;
-        for(std::vector<double>::const_iterator n = a.begin(); n != a.end(); ++n)
+        epoch++;
+        unsigned int numInputs = nn->getNumberInputs();
+        unsigned int numLayers = nn->getNumLayers();
+        for(std::list<pair<double*,double*>>::iterator n = testset->begin(); n != testset->end(); ++n)
         {
-            double e = target[output_index]-(*n);
-            //
-            error[output_index] =   0.5*pow(e, 2.0) ;
-            output_index++;
-            total_error+=error[output_index];
-        }
-        //THIRD STEP BACKPROPAGATION
-        //STEP S^m where m last layer
-        Matrix<double> *sensitivies = new Matrix<double>[numLayers];
-        //INIT ALL ELEMENT
-        vector<double> fDerivativeM = nn->compute(inputVector, true);
-        Matrix<double> errorMatrix(nn->getNumberOutputs(), 1);
-        for(size_t i = 0; i < nn->getNumberOutputs(); ++i)
-            errorMatrix(i,0) = error[i];
-        Matrix<double> fDerivativeMatrix(fDerivativeM.size(), fDerivativeM.size());
-        for(size_t i = 0; i < fDerivativeM.size(); ++i)
-        {
-            for(size_t j = 0; j < fDerivativeM.size(); ++j)
+            //input - target
+            double* input  = (*n).first;
+            double* target = (*n).second;
+            //FIRST STEP COMPUTE THE OUTPUT FORM THE NN
+            vector<double> inputVector = vector<double>(input,(input+numInputs));
+            //a is the vector output of the nn
+            vector<double> a = nn->compute(inputVector);
+            std::cout << "valore output rete neurale " << a[0] << "\n";
+            vector<double> network_output_a0 = nn->computeOutputLayer(0,inputVector, false);
+            std::cout << network_output_a0[0] << " <-> " << network_output_a0[1] << "\n";
+            //SECOND STEP COMPUTE THE ERROR
+            double *error = new double[nn->getNumberOutputs()];
+            double total_error = 0;
+            unsigned int output_index = 0;
+            for(std::vector<double>::const_iterator output_iter = a.begin(); output_iter != a.end(); ++output_iter)
             {
-                if(i==j)
-                    fDerivativeMatrix(i,j) = fDerivativeM[i];
-                else
-                    fDerivativeMatrix(i, j) = 0.0;
+                double e = target[output_index]-(*output_iter);
+                //
+                error[output_index] =   e;//0.5*pow(e, 2.0) ;
+                output_index++;
+                total_error+=error[output_index];
             }
-        }
-        sensitivies[numLayers-1] = fDerivativeMatrix*errorMatrix*-2;
+            //THIRD STEP BACKPROPAGATION
+            //STEP S^m where m last layer
+            Matrix<double> *sensitivies = new Matrix<double>[numLayers];
 
-
-        //S-layer_number
-        for(int  layer_index = numLayers-2; layer_index >= 0 ; --layer_index)
-        {
-            std::cout << " layer number : "  << layer_index << "\n";
-            //compute matrix for F^layer_index(n^layer_index)
-            Matrix<double> fDerM();
-            fDerivativeM = nn->computeOutputLayer(layer_index,inputVector, true);
-            fDerivativeMatrix =  Matrix<double>(fDerivativeM.size(), fDerivativeM.size());
+            //INIT ALL ELEMENT
+            vector<double> fDerivativeM = nn->compute(inputVector, true);
+            Matrix<double> errorMatrix(nn->getNumberOutputs(), 1);
+            for(size_t i = 0; i < nn->getNumberOutputs(); ++i)
+                errorMatrix(i,0) = error[i];
+            Matrix<double> fDerivativeMatrix(fDerivativeM.size(), fDerivativeM.size());
             for(size_t i = 0; i < fDerivativeM.size(); ++i)
             {
                 for(size_t j = 0; j < fDerivativeM.size(); ++j)
@@ -83,47 +81,64 @@ void Backpropagation::train()
                         fDerivativeMatrix(i, j) = 0.0;
                 }
             }
-            //Weight transpose matrix layer_index+1
-            Matrix<double> wT = nn->getWeightMatrixOfLayer(layer_index+1, true);
-            sensitivies[layer_index] = fDerivativeMatrix*wT*sensitivies[layer_index+1];
+            sensitivies[numLayers-1] = fDerivativeMatrix*errorMatrix*-2;
+            std::cout << "sensitivie [" << numLayers-1 << "]\n";
+            std::cout << errorMatrix;
+            std::cout << "\n";
+            std::cout << sensitivies[numLayers-1];
+            //S-layer_number
+            for(int  layer_index = numLayers-2; layer_index >= 0 ; --layer_index)
+            {
+                //compute matrix for F^layer_index(n^layer_index)
+                Matrix<double> fDerM();
+                fDerivativeM = nn->computeOutputLayer(layer_index,inputVector, true);
+                fDerivativeMatrix =  Matrix<double>(fDerivativeM.size(), fDerivativeM.size());
+                for(size_t i = 0; i < fDerivativeM.size(); ++i)
+                {
+                    for(size_t j = 0; j < fDerivativeM.size(); ++j)
+                    {
+                        if(i==j)
+                            fDerivativeMatrix(i,j) = fDerivativeM[i];
+                        else
+                            fDerivativeMatrix(i, j) = 0.0;
+                    }
+                }
+                //Weight transpose matrix layer_index+1
+                Matrix<double> wT = nn->getWeightMatrixOfLayer(layer_index+1, true);
+                sensitivies[layer_index] = fDerivativeMatrix*wT*sensitivies[layer_index+1];
+            }
+            //LAST STEP - update the weights
+            for(int  layer_index = numLayers-1; layer_index >= 0 ; --layer_index)
+            {
+
+                Matrix<double> w = nn->getWeightMatrixOfLayer(layer_index);
+                //compute the input for the current layer
+
+                vector<double> network_output;
+                if(layer_index != 0)
+                    network_output = nn->computeOutputLayer(layer_index-1,inputVector, false);
+                else
+                    network_output = inputVector;
+                Matrix<double> aT(1, a.size());
+                for(unsigned int i = 0; i < network_output.size(); ++i)
+                    aT(0,i) = network_output[i];
 
 
+                Matrix<double> wToUpdate = w-(sensitivies[layer_index] * aT * learning_rate);
+                this->nn->setWeights(layer_index, wToUpdate);
+                std::cout << "layer index " << layer_index  << "\n";
 
+                std::cout << nn->getWeightMatrixOfLayer(layer_index);
+                std::cout << "\n";
+                Matrix<double> biasToUpdate = nn->getBiasMatrixOfLayer(layer_index) - ( sensitivies[layer_index] * learning_rate );
+                this->nn->setBiases(layer_index, biasToUpdate);
+                std::cout <<  nn->getBiasMatrixOfLayer(layer_index);
+                std::cout << "\n";
 
+            }
 
-
+            delete []sensitivies;
+            delete error;
         }
-        //LAST STEP - update the weights
-        for(int  layer_index = numLayers-1; layer_index >= 0 ; --layer_index)
-        {
-
-            Matrix<double> w = nn->getWeightMatrixOfLayer(layer_index);
-            std::cout << "Update for " << layer_index << "\n";
-            //compute the input for the current layer
-
-            vector<double> a;
-            if(layer_index != 0)
-                a = nn->computeOutputLayer(layer_index-1,inputVector, false);
-            else
-                a = inputVector;
-            Matrix<double> aT(1, a.size());
-            for(unsigned int i = 0; i < a.size(); ++i)
-                 aT(0,i) = a[i];
-
-
-            Matrix<double> wToUpdate = w-(sensitivies[layer_index] * aT * learning_rate);
-
-            std::cout << wToUpdate;
-
-            Matrix<double> biasToUpdate = nn->getBiasMatrixOfLayer(layer_index) - ( sensitivies[layer_index] * learning_rate );
-
-            std::cout << biasToUpdate;
-
-
-        }
-
-        std::cout << " @ : "  << "\n";
-        delete []sensitivies;
-        delete error;
     }
 }

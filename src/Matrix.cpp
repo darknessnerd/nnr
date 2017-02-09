@@ -10,7 +10,7 @@ using std::cout;
 template<class T>
 Matrix<T>::Matrix(const std::size_t rows, const std::size_t columns):rows(rows), columns(columns)
 {
-    std::cout << "template<class T> Matrix<T>::Matrix(const std::size_t rows, const std::size_t columns):rows(rows), columns(columns)\n";
+    //std::cout << "template<class T> Matrix<T>::Matrix(const std::size_t rows, const std::size_t columns):rows(rows), columns(columns)\n";
     this->m = new T*[rows];
     for( std::size_t i = 0; i < rows; ++i)
     {
@@ -25,7 +25,7 @@ Matrix<T>::Matrix(const std::size_t rows, const std::size_t columns):rows(rows),
 template<class T>
 Matrix<T>::Matrix(const std::initializer_list<std::initializer_list<T>> matrix):m(nullptr)
 {
-     std::cout << "template<class T> Matrix<T>::Matrix(const std::initializer_list<std::initializer_list<T>>& matrix):m(nullptr)\n";
+    //std::cout << "template<class T> Matrix<T>::Matrix(const std::initializer_list<std::initializer_list<T>>& matrix):m(nullptr)\n";
     if(matrix.size() > 0)
     {
         this->rows = matrix.size();
@@ -53,13 +53,13 @@ Matrix<T>::Matrix(const std::initializer_list<std::initializer_list<T>> matrix):
 template<class T>
 Matrix<T>::Matrix(const Matrix<T> &other)
 {
-    cout << "template<class T> Matrix<T>::Matrix(const Matrix<T> &other)\n";
+    //cout << "template<class T> Matrix<T>::Matrix(const Matrix<T> &other)\n";
     this->copyFrom(other);
 }
 template<class T>
 Matrix<T>::Matrix(Matrix<T> &&other) noexcept
 {
-    cout << "template<class T> Matrix<T>::Matrix(Matrix<T> &&other) noexcept\n";
+    //cout << "template<class T> Matrix<T>::Matrix(Matrix<T> &&other) noexcept\n";
     //COPY FROM OTHER
     this->copyFrom(other);
     //RESET THE OTHER OBJECT
@@ -79,7 +79,7 @@ Matrix<T>::Matrix(Matrix<T> &&other) noexcept
 template<class T>
 void Matrix<T>::copyFrom(const Matrix<T> &other)
 {
-    cout << "template<class T> void Matrix<T>::copyFrom(const Matrix<T> &other)\n";
+    //cout << "template<class T> void Matrix<T>::copyFrom(const Matrix<T> &other)\n";
     this->rows = other.rows;
     this->columns = other.columns;
 
@@ -107,7 +107,7 @@ void Matrix<T>::copyFrom(const Matrix<T> &other)
 template<class T>
 Matrix<T>& Matrix<T>::operator= (const Matrix<T>& other)
 {
-    std::cout << "template<class T> Matrix<T>& Matrix<T>::operator= (const Matrix<T>& other)\n";
+    //std::cout << "template<class T> Matrix<T>& Matrix<T>::operator= (const Matrix<T>& other)\n";
     Matrix<T> tmp(other);         // re-use copy-constructor
     *this = std::move(tmp); // re-use move-assignment
     return *this;
@@ -117,7 +117,7 @@ Matrix<T>& Matrix<T>::operator= (const Matrix<T>& other)
 template<class T>
 Matrix<T>& Matrix<T>::operator= (Matrix<T>&& other) noexcept
 {
-    std::cout << "template<class T> Matrix<T>& Matrix<T>::operator= (Matrix<T>&& other) noexcept\n";
+    //std::cout << "template<class T> Matrix<T>& Matrix<T>::operator= (Matrix<T>&& other) noexcept\n";
     //delete current data
     for( std::size_t i = 0; i < rows; ++i)
         delete []this->m[i];
@@ -141,7 +141,7 @@ Matrix<T>::Matrix():rows(0), columns(0)
 template<class T>
 Matrix<T>::~Matrix()  noexcept
 {
-    std::cout << "template<class T> Matrix<T>::~Matrix()  noexcept\n";
+    //std::cout << "template<class T> Matrix<T>::~Matrix()  noexcept\n";
     for( std::size_t i = 0; i < rows; ++i)
         delete []this->m[i];
 

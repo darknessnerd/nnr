@@ -106,16 +106,18 @@ void backPropagationTest()
 
     bck.train();
 
+
+    cout << "after train: \n";
     cout << fan << endl;
 
 
-  /*  vector<double> r = fan->compute({1});
+    vector<double> r = fan->compute({1});
     printcoll(r);
     r = fan->compute({0.5});
     printcoll(r);
     r = fan->compute({-1});
     printcoll(r);
-*/
+
     delete fan;
 
 }
@@ -124,17 +126,8 @@ int main()
 {
 
     backPropagationTest();
-    /*Matrix<double> m(1,1);
-    m(0,0) = 1;
-    std::cout << m;
 
-    Matrix<double> m1(1,1);
-    m1(0,0) = 2;
-    std::cout << m1;
-
-
-    std::cout << m*m1;
-    */return 0;
+    return 0;
 }
 
 

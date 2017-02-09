@@ -68,6 +68,22 @@ public:
     */
     void addWeight(const unsigned int layer_index, const unsigned int neuron_index, const unsigned int input_index, const double weight);
 
+    /** \brief
+     *  update the neuron weight of the layer
+     * \param layer_index const unsignedint
+     * \param weights_matrix const Matrix<double>& - rows = neurons, columns = inputs
+     * \return void
+     *
+     */
+    void setWeights(const unsigned int layer_index, const Matrix<double> & weight_matrix);
+    /** \brief
+     *  update the neuron bias of the layer
+     * \param layer_index const unsignedint
+     * \param bias_matrix const Matrix<double>& - rows = neurons, columns = 1
+     * \return void
+     *
+     */
+    void setBiases(const unsigned int layer_index, const Matrix<double> & setBiases);
     friend ostream &operator<<( ostream &output, const NeuralNetwork *nn )
     {
         for(unsigned int layer = 0; layer < nn->numLayers; ++layer)

@@ -25,9 +25,32 @@ void Layer::addWeight(const unsigned int &neuron_index,const unsigned int &input
        throw std::invalid_argument("Layer::addWeight invalid input index");
     this->neurons[neuron_index]->addWeight(input_index, weight);
 }
+void Layer::setWeights(const Matrix<double> &weights_matrix)
+{
+    if(weights_matrix.getRows() !=  this->numNeurons && weights_matrix.getColumns() != this->numInputs)
+        throw std::invalid_argument("Layer::setWeights invalid weight matrix dimension");
+    for(unsigned int neuron_index= 0; neuron_index < this->numNeurons; ++neuron_index)
+    {
+        for(unsigned int input_index= 0; input_index < this->numInputs; ++input_index)
+        {
+                double w = weights_matrix(neuron_index, input_index);
+                this->neurons[neuron_index]->setWeight(input_index, w);
+        }
+    }
+}
 unsigned int Layer::getNumNeurons() const
 {
     return this->numNeurons;
+}
+
+void Layer::setBiases(const Matrix<double> &bias)
+{
+    if(bias.getRows() !=  this->numNeurons && bias.getColumns() != 1)
+        throw std::invalid_argument("Layer::setBiasMatrix invalid bias matrix dimension");
+
+    for(unsigned int n = 0 ; n < this->numNeurons; ++n)
+       this->neurons[n]->setBias(bias(n,0));
+
 }
 
 Matrix<double> Layer::getBiasMatrix(bool transpose)
