@@ -21,7 +21,7 @@ void Backpropagation::train()
     Matrix<double> layer_0_w = {{-0.27}, {-0.41}};
     Matrix<double> layer_0_b = {{-0.48}, {-0.13}};
 
-    Matrix<double> layer_1_w = {{0.09, 0.17}};
+    Matrix<double> layer_1_w = {{0.09, -0.17}};
     Matrix<double> layer_1_b = {{0.48}};
     this->nn->setWeights(0, layer_0_w);
     this->nn->setBiases(0, layer_0_b);
@@ -29,10 +29,8 @@ void Backpropagation::train()
     this->nn->setWeights(1, layer_1_w);
     this->nn->setBiases(1, layer_1_b);
 
-    std::cout << nn;
-
     unsigned int epoch = 0;
-    while(epoch < 1)
+    while(epoch < 50)
     {
         epoch++;
         unsigned int numInputs = nn->getNumberInputs();
@@ -46,9 +44,6 @@ void Backpropagation::train()
             vector<double> inputVector = vector<double>(input,(input+numInputs));
             //a is the vector output of the nn
             vector<double> a = nn->compute(inputVector);
-            std::cout << "valore output rete neurale " << a[0] << "\n";
-            vector<double> network_output_a0 = nn->computeOutputLayer(0,inputVector, false);
-            std::cout << network_output_a0[0] << " <-> " << network_output_a0[1] << "\n";
             //SECOND STEP COMPUTE THE ERROR
             double *error = new double[nn->getNumberOutputs()];
             double total_error = 0;
@@ -82,10 +77,7 @@ void Backpropagation::train()
                 }
             }
             sensitivies[numLayers-1] = fDerivativeMatrix*errorMatrix*-2;
-            std::cout << "sensitivie [" << numLayers-1 << "]\n";
-            std::cout << errorMatrix;
-            std::cout << "\n";
-            std::cout << sensitivies[numLayers-1];
+
             //S-layer_number
             for(int  layer_index = numLayers-2; layer_index >= 0 ; --layer_index)
             {
@@ -106,6 +98,7 @@ void Backpropagation::train()
                 //Weight transpose matrix layer_index+1
                 Matrix<double> wT = nn->getWeightMatrixOfLayer(layer_index+1, true);
                 sensitivies[layer_index] = fDerivativeMatrix*wT*sensitivies[layer_index+1];
+
             }
             //LAST STEP - update the weights
             for(int  layer_index = numLayers-1; layer_index >= 0 ; --layer_index)
@@ -119,21 +112,15 @@ void Backpropagation::train()
                     network_output = nn->computeOutputLayer(layer_index-1,inputVector, false);
                 else
                     network_output = inputVector;
-                Matrix<double> aT(1, a.size());
+                Matrix<double> aT(1, network_output.size());
                 for(unsigned int i = 0; i < network_output.size(); ++i)
                     aT(0,i) = network_output[i];
 
-
                 Matrix<double> wToUpdate = w-(sensitivies[layer_index] * aT * learning_rate);
                 this->nn->setWeights(layer_index, wToUpdate);
-                std::cout << "layer index " << layer_index  << "\n";
 
-                std::cout << nn->getWeightMatrixOfLayer(layer_index);
-                std::cout << "\n";
                 Matrix<double> biasToUpdate = nn->getBiasMatrixOfLayer(layer_index) - ( sensitivies[layer_index] * learning_rate );
                 this->nn->setBiases(layer_index, biasToUpdate);
-                std::cout <<  nn->getBiasMatrixOfLayer(layer_index);
-                std::cout << "\n";
 
             }
 

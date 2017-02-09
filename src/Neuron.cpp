@@ -57,7 +57,7 @@ double Neuron::productory(const vector<double> &inputs)
     {
         productory += (*it) * this->w[i++];
     }
-    return productory + this->bias;
+    return productory +this->bias;
 }
 
 double Neuron::getBias() const
@@ -72,8 +72,9 @@ double Neuron::compute(const vector<double> &inputs, bool derivate )
 {
     double productory = this->productory(inputs);
     if(!derivate)
-        return this->transferFunction->compute(productory);
-    return this->transferFunction->derivative(productory);
+        return this->transferFunction->compute((productory)) ;
+
+    return this->transferFunction->derivative(this->transferFunction->compute((productory))) ;
 }
 Neuron::Neuron(const Neuron& other)
 {

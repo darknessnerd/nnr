@@ -83,7 +83,7 @@ public:
      * \return void
      *
      */
-    void setBiases(const unsigned int layer_index, const Matrix<double> & setBiases);
+    void setBiases(const unsigned int layer_index, const Matrix<double> & bias_matrix);
     friend ostream &operator<<( ostream &output, const NeuralNetwork *nn )
     {
         for(unsigned int layer = 0; layer < nn->numLayers; ++layer)

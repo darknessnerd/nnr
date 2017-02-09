@@ -102,7 +102,11 @@ void backPropagationTest()
     cout << endl;
     nn::train::Backpropagation bck(fan);
     //add training elemnts
-    bck.addTrainPair({1}, {1.7});
+    bck.addTrainPair({1}, {1.707});
+    bck.addTrainPair({-2}, {0.0});
+    bck.addTrainPair({2}, {2});
+    bck.addTrainPair({1.5}, {1.92});
+
 
     bck.train();
 
@@ -113,9 +117,9 @@ void backPropagationTest()
 
     vector<double> r = fan->compute({1});
     printcoll(r);
-    r = fan->compute({0.5});
+    r = fan->compute({2});
     printcoll(r);
-    r = fan->compute({-1});
+    r = fan->compute({-2});
     printcoll(r);
 
     delete fan;

@@ -56,14 +56,14 @@ void NeuralNetwork::setWeights(const unsigned int layer_index, const Matrix<doub
 
 
 }
-void NeuralNetwork::setBiases(const unsigned int layer_index, const Matrix<double> & setBiases)
+void NeuralNetwork::setBiases(const unsigned int layer_index, const Matrix<double> & bias_matrix)
 {
    if(layer_index >= this->numLayers)
         throw std::invalid_argument("NeuralNetwork::setBiases invalid layer index");
 
     try
     {
-        this->layers[layer_index]->setBiases( setBiases);
+        this->layers[layer_index]->setBiases( bias_matrix);
     }
     catch (const std::invalid_argument& e)
     {
@@ -122,7 +122,7 @@ vector<double> NeuralNetwork::compute(const vector<double> &inputs, bool derivat
     vector<double> result(inputs);
     for(unsigned int layer = 0; layer < this->numLayers; ++layer)
     {
-        result = this->layers[layer]->compute(result, derivative);
+        result = this->layers[layer]->compute(result, derivative );
     }
     return result;
 }
@@ -136,7 +136,7 @@ vector<double> NeuralNetwork::computeOutputLayer(const unsigned int layer_index,
         vector<double> result(inputs);
         for(unsigned int layer = 0; layer <= layer_index; ++layer)
         {
-            result = this->layers[layer]->compute(result, derivative);
+            result = this->layers[layer]->compute(result,derivative);
         }
         return result;
     }
