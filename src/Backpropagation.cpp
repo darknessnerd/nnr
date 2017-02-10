@@ -30,7 +30,7 @@ void Backpropagation::train()
     this->nn->setBiases(1, layer_1_b);
 
     unsigned int epoch = 0;
-    while(epoch < 50)
+    while(epoch < 350)
     {
         epoch++;
         unsigned int numInputs = nn->getNumberInputs();
