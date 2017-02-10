@@ -13,9 +13,21 @@ using namespace std;
 
 #include "Perceptron.h"
 
+#include <iostream>
+#include <fstream>
+#include <sstream>
 
-
-
+vector<string> split(const string &s, char delim)
+{
+    stringstream ss(s);
+    string item;
+    vector<string> tokens;
+    while (getline(ss, item, delim))
+    {
+        tokens.push_back(item);
+    }
+    return tokens;
+}
 template <typename T> void printcoll (T const& coll)
 {
     typename T::const_iterator pos;  // iterator to iterate over coll
@@ -102,10 +114,34 @@ void backPropagationTest()
     cout << endl;
     nn::train::Backpropagation bck(fan);
     //add training elemnts
-    bck.addTrainPair({1}, {1.707});
-    bck.addTrainPair({-2}, {0.0});
-    bck.addTrainPair({2}, {2});
-    bck.addTrainPair({1.5}, {1.92});
+
+
+    std::ifstream file("train.csv");
+    string line;
+    if (file.is_open())
+    {
+        while ( getline (file,line, '\n') )
+        {
+            cout << line << '\n';
+            vector<string> parsed = split(line, ',');
+            double *d = new double[parsed.size()];
+            int i = 0;
+            for(std::vector<string>::const_iterator output_iter = parsed.begin(); output_iter != parsed.end(); ++output_iter)
+            {
+                std::string::size_type sz;     // alias of size_t
+
+                double value = std::stod (*output_iter,&sz);
+                d[i++] = value;
+            }
+            bck.addTrainPair({d[0]}, {d[1]});
+
+            delete d;
+
+        }
+
+        file.close();
+    }
+    else cout << "Unable to open file";
 
 
     bck.train();
@@ -115,12 +151,24 @@ void backPropagationTest()
     cout << fan << endl;
 
 
-    vector<double> r = fan->compute({1});
-    printcoll(r);
-    r = fan->compute({2});
-    printcoll(r);
-    r = fan->compute({-2});
-    printcoll(r);
+    std::ifstream file1("input.csv");
+    if (file1.is_open())
+    {
+        while ( getline (file,line, '\n') )
+        {
+            cout << line << '\n';
+
+            double value = std::stod (line);
+
+            vector<double> r = fan->compute({value});
+
+        }
+
+        file1.close();
+    }
+    else cout << "Unable to open file";
+
+
 
     delete fan;
 
@@ -128,6 +176,8 @@ void backPropagationTest()
 
 int main()
 {
+
+
 
     backPropagationTest();
 
