@@ -5,6 +5,8 @@
 using std::array;
 #include <vector>
 using std::vector;
+#include <string>
+using std::string;
 namespace nn
 {
 
@@ -51,6 +53,8 @@ public:
      */
     vector<double> computeOutputLayer(const unsigned int layer_index, const vector<double> &inputs, bool derivative  = false);
     vector<double> compute(const vector<double> &inputs, bool derivative = false);
+    void compute(const string &input_file_path, const string& output_file_path, const char delim, const char line_delim, const char input_result_delim);
+
        /** \brief
      * \return neuron numbers layer's
      */

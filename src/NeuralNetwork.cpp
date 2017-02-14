@@ -1,5 +1,12 @@
 #include "NeuralNetwork.h"
 using namespace nn;
+
+
+#include <iostream>
+#include <fstream>
+#include <sstream>
+
+
 NeuralNetwork::NeuralNetwork(const unsigned int numberInputs):numberInputs(numberInputs)
 {
     cout << "Construct network!\n" ;
@@ -38,6 +45,47 @@ void NeuralNetwork::addWeight(const unsigned int layer_index,const unsigned int 
         std::rethrow_exception(std::current_exception());
     }
 
+}
+
+void NeuralNetwork::compute(const string &input_file_path, const string& output_file_path, const char delim, const char line_delim, const char input_result_delim)
+{
+    std::ofstream result_file;
+    result_file.open (output_file_path, std::ios_base::trunc);
+    string line;
+
+
+
+    std::ifstream input_file(input_file_path);
+    if (input_file.is_open())
+    {
+        while ( getline (input_file,line, line_delim) )
+        {
+
+
+            double value = std::stod (line);
+
+            vector<double> r = this->compute({value});
+
+            result_file << value;
+            for(std::vector<double>::const_iterator output_iter = r.begin(); output_iter != r.end(); ++output_iter)
+            {
+                result_file << "\t" << *output_iter;
+            }
+
+            result_file << line_delim;
+
+        }
+
+        input_file.close();
+    }
+    else
+    {
+        result_file.close();
+        throw std::runtime_error("NeuralNetwork::compute! can't open the file!");
+    }
+
+
+    result_file.close();
 }
 
 void NeuralNetwork::setWeights(const unsigned int layer_index, const Matrix<double> & weight_matrix)

@@ -4,12 +4,14 @@ using namespace math;
 #include <stdexcept>
 #include <iostream>
 using std::cout;
-
-
+#include <string>
+#include <type_traits>
 
 template<class T>
 Matrix<T>::Matrix(const std::size_t rows, const std::size_t columns):rows(rows), columns(columns)
 {
+    //compile time error
+    static_assert(std::is_integral<T>::value || std::is_floating_point<T>::value, "Matrix::Matrix Number required.");
     //std::cout << "template<class T> Matrix<T>::Matrix(const std::size_t rows, const std::size_t columns):rows(rows), columns(columns)\n";
     this->m = new T*[rows];
     for( std::size_t i = 0; i < rows; ++i)
@@ -25,6 +27,8 @@ Matrix<T>::Matrix(const std::size_t rows, const std::size_t columns):rows(rows),
 template<class T>
 Matrix<T>::Matrix(const std::initializer_list<std::initializer_list<T>> matrix):m(nullptr)
 {
+    //compile time error
+    static_assert(std::is_integral<T>::value || std::is_floating_point<T>::value, "Matrix::Matrix Number required.");
     //std::cout << "template<class T> Matrix<T>::Matrix(const std::initializer_list<std::initializer_list<T>>& matrix):m(nullptr)\n";
     if(matrix.size() > 0)
     {
@@ -53,6 +57,7 @@ Matrix<T>::Matrix(const std::initializer_list<std::initializer_list<T>> matrix):
 template<class T>
 Matrix<T>::Matrix(const Matrix<T> &other)
 {
+
     //cout << "template<class T> Matrix<T>::Matrix(const Matrix<T> &other)\n";
     this->copyFrom(other);
 }
@@ -235,6 +240,5 @@ template class Matrix<double>;
 template class Matrix<int>;
 template class Matrix<long>;
 template class Matrix<unsigned long>;
-
 
 
