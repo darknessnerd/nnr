@@ -98,29 +98,11 @@ void backPropagationTest()
 
     nn::NeuralNetwork *fan = new FunctionApproximationNetwork();
     fan->init();
-
-
-
-    cout << endl;
-    nn::train::Backpropagation bck(fan);
+    nn::train::Backpropagation bck(fan, 0.1,1);
     //add training elemnts from file
-
     bck.addTrainSet("train.csv", ',', '\n', '|');
-
-
-
     bck.train();
-
-
-    cout << "after train: \n";
-    cout << fan << endl;
-
-    fan->compute("input.csv", "result.dat", ',','\n','|');
-
-
-
-
-
+    fan->compute("input.csv", "result.dat", ',','\n',',');
     delete fan;
 
 }

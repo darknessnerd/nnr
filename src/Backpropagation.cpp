@@ -4,7 +4,10 @@ using namespace nn::train;
 #include <math.h>
 #include "Matrix.h"
 using namespace math;
-Backpropagation::Backpropagation(NeuralNetwork *network):SupervisedLearning(network), learning_rate(0.1)
+Backpropagation::Backpropagation(NeuralNetwork *network, double learning_rate, double momentum)
+:SupervisedLearning(network),
+ learning_rate(learning_rate),
+  momentum(momentum)
 {
 
 }
@@ -16,18 +19,9 @@ Backpropagation::~Backpropagation()
 void Backpropagation::train()
 {
     //random weight
-    //nn->random_weight();
+    nn->random_weight();
 
-    Matrix<double> layer_0_w = {{-0.27}, {-0.41}};
-    Matrix<double> layer_0_b = {{-0.48}, {-0.13}};
 
-    Matrix<double> layer_1_w = {{0.09, -0.17}};
-    Matrix<double> layer_1_b = {{0.48}};
-    this->nn->setWeights(0, layer_0_w);
-    this->nn->setBiases(0, layer_0_b);
-
-    this->nn->setWeights(1, layer_1_w);
-    this->nn->setBiases(1, layer_1_b);
 
     unsigned int epoch = 0;
     while(epoch < 350)

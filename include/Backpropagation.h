@@ -8,7 +8,16 @@ namespace train{
 class Backpropagation : public SupervisedLearning
 {
     public:
-        Backpropagation(NeuralNetwork *network);
+
+        /** \brief
+         *
+         * \param network NeuralNetwork*
+         * \param
+         * \param learning_rate double
+         * \param 1.0 double momentum= is a Heuristic Modifications of Backpropagation, 0 <= momentum <= 1
+         *
+         */
+        Backpropagation(NeuralNetwork *network, double learning_rate, double momentum = 1.0);
         virtual ~Backpropagation();
 
         void train();
@@ -17,6 +26,7 @@ class Backpropagation : public SupervisedLearning
 
     private:
        double learning_rate;
+       double momentum;
 };
 
 }

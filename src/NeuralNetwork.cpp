@@ -67,9 +67,15 @@ void NeuralNetwork::compute(const string &input_file_path, const string& output_
             vector<double> r = this->compute({value});
 
             result_file << value;
+
+            result_file << input_result_delim;
+
             for(std::vector<double>::const_iterator output_iter = r.begin(); output_iter != r.end(); ++output_iter)
             {
-                result_file << "\t" << *output_iter;
+                if(output_iter != r.begin())
+                    result_file << delim;
+                result_file << *output_iter;
+
             }
 
             result_file << line_delim;
